@@ -36,7 +36,9 @@ LDFLAGS = -shared -Bsymbolic -L$(GNU_EFI_DIR)/x86_64/lib -L$(GNU_EFI_DIR)/x86_64
 	  -lgnuefi -lefi
 
 # Objcopy parameters
-OBJCOPYFLAGS = -j ".text" -j ".sdata" -j ".data" -j ".rodata" -j ".dynamic" -j ".dynsym" -j ".rel" -j ".rela" -j ".rel.*" -j ".rela.*" -j ".reloc" --target efi-app-x86_64 --subsystem=10
+OBJCOPYFLAGS = -j ".text" -j ".sdata" -j ".data" -j ".rodata" -j ".dynamic" -j ".dynsym" \
+	       -j ".rel" -j ".rela" -j ".rel.*" -j ".rela.*" -j ".reloc" \
+	       --target efi-app-x86_64 --subsystem=10
 
 # Emulator paramerers
 EMUFLAGS = -drive if=pflash,format=raw,file=$(EFI_EMU_CODE) -drive format=raw,file=$(OUT_IMG) -m 256M
