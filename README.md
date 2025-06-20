@@ -1,6 +1,6 @@
 # HelloEFI
 
-Simple Hello World EFI program.
+Simple Hello World EFI program that utilizes the [**GNU EFI**](http://gnu-efi.sourceforge.net/) environment.
 
 The program's behavior can easily be modified in `src/main.c`
 
@@ -29,6 +29,7 @@ The program's behavior can easily be modified in `src/main.c`
 - Enter the cloned directory: `cd HelloEFI`
 - I suggest you read through `Makefile` and update any options you'd like to change.
 - Run `make` to build the EFI binary.
+    - The first time this is ran, it will automatically obtain source of and build **GNU EFI** as well.
 - Run `make help` for a list of targets.
 
 ## License
