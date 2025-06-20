@@ -4,6 +4,8 @@ Simple Hello World EFI program.
 
 The program's behavior can easily be modified in `src/main.c`
 
+![Default program screenshot from EDK 2 EFI Shell](assets/screenshot.png)
+
 **Building on a Linux-based operating system is strongly recommended. Otherwise, manually editing the Makefile may be required!**
 
 ## Dependencies
