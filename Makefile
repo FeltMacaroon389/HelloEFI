@@ -9,13 +9,17 @@ SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
 GNU_EFI_DIR = gnu-efi
+EFI_DIR = /boot/efi
 
 # EFI code file for emulator
 # Ensure to modify this as needed, OVMF is utilized by default
 # https://github.com/tianocore/tianocore.github.io/wiki/OVMF
 EFI_EMU_CODE = /usr/share/OVMF/x64/OVMF_CODE.4m.fd
 
-# Device to flash image to with the "flash" target
+# Directory to install binary to with "install" target
+INSTALL_DIR = $(EFI_DIR)/EFI/Boot/Custom
+
+# Device to flash image to with "flash" target
 FLASH_DEV = /dev/sda
 
 # Output EFI binary and bootable image
@@ -38,7 +42,7 @@ OBJCOPYFLAGS = -j ".text" -j ".sdata" -j ".data" -j ".rodata" -j ".dynamic" -j "
 EMUFLAGS = -drive if=pflash,format=raw,file=$(EFI_EMU_CODE) -drive format=raw,file=$(OUT_IMG) -m 256M
 
 # PHONY targets
-.PHONY: all gnuefi help run flash clean
+.PHONY: all gnuefi help run install uninstall flash clean
 
 
 # By default, build the output EFI binary
@@ -55,7 +59,9 @@ help:
 	@echo "    $(OUT_BIN)	- Compile the EFI binary"
 	@echo "    $(OUT_IMG)	- Create a bootable image"
 	@echo "    run			- Build the image and run it in an emulator (QEMU by default, ensure your emulator has proper EFI firmware)"
-	@echo "    flash		- flash the image to a storage medium (currently $(FLASH_DEV))"
+	@echo "    install		- Build and install $(OUT_BIN) to $(INSTALL_DIR) (Will probably require root)"
+	@echo "    uninstall		- Delete $(INSTALL_DIR)"
+	@echo "    flash		- flash the image to a storage medium (currently $(FLASH_DEV), will probably require root)"
 	@echo "    clean		- Remove build files"
 	@echo " "
 
@@ -87,13 +93,25 @@ $(OUT_IMG): $(OUT_BIN)
 run: $(OUT_IMG)
 	$(EMU) $(EMUFLAGS)
 
+# Install the binary to INSTALL_DIR
+install: $(OUT_BIN)
+	mkdir -p $(INSTALL_DIR)
+	cp $(OUT_BIN) $(INSTALL_DIR)
+
+	@echo -e "\n$(OUT_BIN) successfully installed to $(INSTALL_DIR)"
+	@echo "You may now create an EFI entry or boot through an EFI Shell"
+
+# Delete INSTALL_DIR
+uninstall:
+	rm -rf $(INSTALL_DIR)
+
 # Flash the image to FLASH_DEV
 flash: $(OUT_IMG)
 	dd if=$(OUT_IMG) of=$(FLASH_DEV) status=progress oflag=sync
 	sync
 	eject $(FLASH_DEV)
 
-	@echo -e "\n$(OUT_IMG) successfully flashed to $(FLASH_DEV)!"
+	@echo -e "\n$(OUT_IMG) successfully flashed to $(FLASH_DEV)"
 	@echo "You may now safely remove your device"
 
 # Delete build files
