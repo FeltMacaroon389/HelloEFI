@@ -29,7 +29,7 @@ The program's behavior can easily be modified in `src/main.c`
 - Enter the cloned directory: `cd HelloEFI`
 - I suggest you read through `Makefile` and update any options you'd like to change.
 - Run `make` to build the EFI binary.
-    - The first time this is ran, it will automatically obtain source of and build **GNU EFI** as well.
+    - The first time this is ran, it will automatically download **GNU EFI** source code and build it.
 - Run `make help` for a list of targets.
 
 ## License
